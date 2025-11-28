@@ -1,0 +1,18 @@
+<div class="h-screen w-full flex justify-center items-center bg-neutral-100">
+  <div class="bg-white p-8 rounded-md min-w-[400px] flex flex-col gap-5 shadow-2xl">
+    <h1 class="text-2xl font-bold">Login</h1>
+    <form (ngSubmit)="signIn()">
+      <div class="flex flex-col gap-2">
+        <label for="email">Email</label>
+        <input pInputText type="email" id="email" name="email" [(ngModel)]="email" />
+      </div>
+      <div class="flex flex-col gap-2 mt-5">
+        <label for="password">Password</label>
+        <input pInputText type="password" id="password" name="password" [(ngModel)]="password" />
+      </div>
+      <div class="flex justify-end">
+        <p-button type="submit" label="Ingresar" severity="primary" class="mt-5" />
+      </div>
+    </form>
+  </div>
+</div>

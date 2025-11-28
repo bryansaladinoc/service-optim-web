@@ -1,0 +1,153 @@
+<section class="flex justify-between items-end mb-10">
+  <app-title-pages
+    [title]="titlePage"
+    [subtitle]="subTitlePage"
+    [return]="false"
+  />
+
+  <p-button
+    label="Crear nuevo servicio"
+    icon="pi pi-plus"
+    aria-label="Save"
+    routerLink="form"
+  />
+</section>
+
+<section class="rounded-md py-5">
+  <div class="flex flex-col mb-2">
+    <span class="font-extrabold text-xl">Todos los servicios</span>
+    <span class="text-gray-500">Lista de todos los servicios</span>
+  </div>
+
+  <section class="flex items-end gap-5 rounded-md mb-6">
+    <input
+      pInputText
+      type="text"
+      id="username"
+      aria-describedby="username-help"
+      class="w-1/3"
+      placeholder="Buscar cliente"
+    />
+    <div class="flex flex-col gap-2">
+      <label>Fecha inicio</label>
+      <p-datepicker
+        dateFormat="dd/mm/yy"
+        class="w-full"
+        [(ngModel)]="startDate"
+      />
+    </div>
+    <div class="flex flex-col gap-2">
+      <label>Fecha fin</label>
+      <p-datepicker
+        dateFormat="dd/mm/yy"
+        class="w-full"
+        [(ngModel)]="endDate"
+      />
+    </div>
+  </section>
+
+  <p-table
+    [columns]="tableCols"
+    [value]="this.fieldServices"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template #header let-columns>
+      <tr>
+        @for (col of columns; track col.header) {
+        <th>{{ col.header }}</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template #body let-s>
+      <tr>
+        <td>{{s?.client?.clientNumber}}</td>
+        <td>{{s?.client?.name}}</td>
+        <td>{{s?.date}}</td>
+        <td>{{s?.nextDate}}</td>
+        <td>{{s?.status}}</td>
+        <td class="flex gap-2 items-center">
+          <p-button
+            icon="pi pi-pencil"
+            aria-label="Edit"
+            [routerLink]="['form', s?.id]"
+            [state]="{service: s}"
+            severity="warn"
+          />
+          <p-button
+            label="Crear orden"
+            aria-label="Save"
+            severity="info"
+            (onClick)="visibleDialog = true"
+          />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</section>
+
+<!-- Dialog -->
+<p-dialog
+  header="Crea una orden de servicio"
+  [modal]="true"
+  [(visible)]="visibleDialog"
+  [blockScroll]="true"
+  [contentStyle]="{ overflow: 'visible' }"
+>
+  <span class="p-text-secondary block mb-8"
+    >Ingresa la información solicitada</span
+  >
+  <div class="flex flex-col gap-2 grow mb-10">
+    <label>Tecnico asignado</label>
+    <p-select
+      [options]="optionsTecnico"
+      [virtualScroll]="true"
+      optionLabel="name"
+      placeholder="Selecciona un tecnico"
+      class=""
+    />
+    <small>Selecciona el cliente al que se realizara el servicio</small>
+  </div>
+
+  <div class="flex flex-wrap gap-4 mb-8">
+    <div class="flex items-center">
+      <p-radiobutton
+        name="pizza"
+        value="Cheese"
+        [(ngModel)]="serviceType"
+        inputId="control de olores"
+      />
+      <label for="control de olores" class="ml-2">Control de olores</label>
+    </div>
+
+    <div class="flex items-center">
+      <p-radiobutton
+        name="pizza"
+        value="Mushroom"
+        [(ngModel)]="serviceType"
+        inputId="dosificadores"
+      />
+      <label for="dosificadores" class="ml-2">Dosificadores</label>
+    </div>
+
+    <div class="flex items-center">
+      <p-radiobutton
+        name="pizza"
+        value="Pepper"
+        [(ngModel)]="serviceType"
+        inputId="trampa grasa"
+      />
+      <label for="ingredient3" class="ml-2">Trampa de grasa</label>
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-2 mt-5">
+    <p-button
+      label="Cancelar"
+      severity="secondary"
+      (click)="visibleDialog = false"
+    />
+    <p-button label="Crear" (click)="createOrder()" />
+  </div>
+</p-dialog>
+
+<p-toast />
