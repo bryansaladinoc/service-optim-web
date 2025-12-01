@@ -6,7 +6,8 @@ import {
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './auth/interceptors/auth.interceptor';
 import Lara from '@primeuix/themes/lara';
 import { definePreset } from '@primeuix/themes';
 import { routes } from './app.routes';
@@ -24,14 +25,14 @@ const MyPreset = definePreset(Lara, {
       700: '{sky.700}',
       800: '{sky.800}',
       900: '{sky.900}',
-      950: '{sky.950}'
-    }
-  }
+      950: '{sky.950}',
+    },
+  },
 });
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
@@ -39,9 +40,9 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({
       theme: {
         preset: MyPreset,
-        options: { 
+        options: {
           darkModeSelector: '.app-dark',
-          cssLayer: false
+          cssLayer: false,
         },
       },
     }),
